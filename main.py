@@ -5,20 +5,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 
-
-
 options = webdriver.ChromeOptions()
 options.add_argument("user-data-dir=/Users/MR_PC/AppData/Local/Google/Chrome/User Data") 
 driver = webdriver.Chrome(executable_path='./chromedriver.exe',chrome_options=options)
 
 rooturl = 'https://member.hirosaki-surgery2.org/'
-driver.implicitly_wait(10)
+driver.implicitly_wait(3)
 
 pending = {}
 settled = {}
 
-
-# y9bw!SKh9*3fVmqM
 
 # modules
 def click_all(base_url):
@@ -46,15 +42,19 @@ def click_all(base_url):
 def check_mt2e():
 	mt2e = driver.find_elements_by_class_name("mt2e")
 	title = driver.title
-	title.replace('\u3000', '')
+	title.strip()
 	if(len(mt2e) > 0):
-		pending[title] = driver.current_url 
+		pending[title] = driver.current_url
 	else:
-		settled[title] = driver.current_url 
+		settled[title] = driver.current_url
 
 
 
 #############main#############
+print('=====================================')
+print('      HOLS checker Ver.1.0')
+print('=====================================')
+
 driver.get(rooturl)
 WebDriverWait(driver, 5).until(EC.visibility_of_element_located)
 
@@ -82,8 +82,8 @@ for i in range (1000):
 		
 	except:
 		print("end")
-		print(pending)
-		print(settled)
+		print("pending:" + str(pending))
+		print("settled:" + str(settled))
 		break
 
 
