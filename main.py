@@ -5,30 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 
-###
-import PySimpleGUI as sg
-sg.theme('Dark Blue 3')
-
-layout = [
-    [sg.Text('Python GUI')],
-    [sg.Text('名前', size=(15, 1)), sg.InputText('○○〇×××')],
-    [sg.Text('住所', size=(15, 1)), sg.InputText('△△△△村')],
-    [sg.Text('電話番号', size=(15, 1)), sg.InputText('xxx-xxx-xxx')],
-    [sg.Submit(button_text='実行ボタン')]
-]
-
-window = sg.Window('住所を入力', layout)
-
-while True:  # Event Loop
-   event, values = window.read()
-   print(event, values)
-   if event in (None, "Exit"):
-       break
-   if event == "Show":
-       # "-OUTPUT-" 要素を "-IN-" 要素の値に更新
-       window["-OUTPUT-"].update(values["-IN-"])
-
-
 
 options = webdriver.ChromeOptions()
 options.add_argument("user-data-dir=/Users/MR_PC/AppData/Local/Google/Chrome/User Data") 
@@ -107,7 +83,6 @@ for i in range (1000):
 		print("end")
 		print("pending:" + str(pending))
 		print("settled:" + str(settled))
-		window.close()
 		break
 
 
