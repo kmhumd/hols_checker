@@ -6,50 +6,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
+import os
 
 #for windows
 #driver = webdriver.Chrome('./chromedriver.exe')
 #for macintosh
 driver = webdriver.Chrome('/Users/mbp16/work/hols_checker/chromedriver')
-
-
-#############GUI#############
-import PySimpleGUI as sg
-
-#  セクション1 - オプションの設定と標準レイアウト
-sg.theme('Default 1')
-
-layout = [
-    [sg.Text('初期設定')],
-    [sg.Text('ID', size=(15, 1)), sg.InputText('19m1102')],
-    [sg.Text('PASSWORD', size=(15, 1)), sg.InputText('')],
-    [sg.Submit(button_text='開始')]
-]
-
-# セクション 2 - ウィンドウの生成
-window = sg.Window('HOLS checker by KOKI MORITA', layout)
-
-# セクション 3 - イベントループ
-while True:
-    event, values = window.read()
-
-    if event is None:
-        print('exit')
-        break
-
-    if event == '開始':
-        show_message = "ID：" + values[0] + 'が入力されました。\n'
-        show_message += "PASSWORD：" + values[1] + 'が入力されました。\n'
-        print(show_message)
-
-        # ポップアップ
-        sg.popup(show_message)
-
-# セクション 4 - ウィンドウの破棄と終了
-window.close()
-
-
-
 
 
 rooturl = 'https://member.hirosaki-surgery2.org/'
@@ -88,6 +50,11 @@ def check_mt2e():
 
 
 #############main#############
+if os.name == 'nt':
+	os.system('cls')
+elif os.name == 'posix':
+	os.system('clear')
+
 print('=====================================')
 print('      HOLS checker Ver.1.0')
 print('=====================================')
@@ -98,7 +65,9 @@ WebDriverWait(driver, 5).until(EC.visibility_of_element_located)
 print('120秒以内にログインしてください')
 WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, 'main-header-image')))
 print('Login Success')
-x = input('指定領域でキーを押してください')
+
+os.system('cls')
+x = input('チェック対象のページに移動してください。何かキーを押すとチェックを開始します。')
 
 cur_url = driver.current_url
 
