@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -5,16 +7,54 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 
+#for windows
+#driver = webdriver.Chrome('./chromedriver.exe')
+#for macintosh
+driver = webdriver.Chrome('/Users/mbp16/work/hols_checker/chromedriver')
 
-options = webdriver.ChromeOptions()
-options.add_argument("user-data-dir=/Users/MR_PC/AppData/Local/Google/Chrome/User Data") 
-driver = webdriver.Chrome(executable_path='./chromedriver.exe',chrome_options=options)
+
+#############GUI#############
+import PySimpleGUI as sg
+
+#  セクション1 - オプションの設定と標準レイアウト
+sg.theme('Default 1')
+
+layout = [
+    [sg.Text('初期設定')],
+    [sg.Text('ID', size=(15, 1)), sg.InputText('19m1102')],
+    [sg.Text('PASSWORD', size=(15, 1)), sg.InputText('')],
+    [sg.Submit(button_text='開始')]
+]
+
+# セクション 2 - ウィンドウの生成
+window = sg.Window('HOLS checker by KOKI MORITA', layout)
+
+# セクション 3 - イベントループ
+while True:
+    event, values = window.read()
+
+    if event is None:
+        print('exit')
+        break
+
+    if event == '開始':
+        show_message = "ID：" + values[0] + 'が入力されました。\n'
+        show_message += "PASSWORD：" + values[1] + 'が入力されました。\n'
+        print(show_message)
+
+        # ポップアップ
+        sg.popup(show_message)
+
+# セクション 4 - ウィンドウの破棄と終了
+window.close()
+
+
+
+
 
 rooturl = 'https://member.hirosaki-surgery2.org/'
-
 pending = {}
 settled = {}
-
 
 # modules
 def click_all(base_url):
@@ -36,7 +76,6 @@ def click_all(base_url):
 		##判別プログラムの場所
 		check_mt2e()
 
-
 def check_mt2e():
 	driver.implicitly_wait(2)
 	mt2e = driver.find_elements_by_class_name("mt2e")
@@ -46,7 +85,6 @@ def check_mt2e():
 		pending[title] = driver.current_url
 	else:
 		settled[title] = driver.current_url
-
 
 
 #############main#############
