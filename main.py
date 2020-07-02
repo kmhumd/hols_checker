@@ -7,11 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 import os
+import pprint
 
-#for windows
-#driver = webdriver.Chrome('./chromedriver.exe')
-#for macintosh
-driver = webdriver.Chrome('/Users/mbp16/work/hols_checker/chromedriver')
+
+if os.name == 'nt':
+	driver = webdriver.Chrome('./chromedriver.exe')
+elif os.name == 'posix':
+	driver = webdriver.Chrome('/Users/mbp16/work/hols_checker/chromedriver')
 
 
 rooturl = 'https://member.hirosaki-surgery2.org/'
@@ -42,18 +44,20 @@ def check_mt2e():
 	driver.implicitly_wait(2)
 	mt2e = driver.find_elements_by_class_name("mt2e")
 	title = driver.title
-	title.strip()
+	title = title.replace('\u3000', ' ')
 	if(len(mt2e) > 0):
 		pending[title] = driver.current_url
 	else:
 		settled[title] = driver.current_url
 
+def clr():
+	if os.name == 'nt':
+		os.system('cls')
+	elif os.name == 'posix':
+		os.system('clear')
 
 #############main#############
-if os.name == 'nt':
-	os.system('cls')
-elif os.name == 'posix':
-	os.system('clear')
+clr()
 
 print('=====================================')
 print('      HOLS checker Ver.1.0')
@@ -69,6 +73,7 @@ print('Login Success')
 os.system('cls')
 x = input('チェック対象のページに移動してください。何かキーを押すとチェックを開始します。')
 
+#main_routine
 cur_url = driver.current_url
 
 for i in range (1000):
@@ -88,9 +93,17 @@ for i in range (1000):
 		
 	except:
 		print("end")
-		print("pending:" + str(pending))
-		print("settled:" + str(settled))
+		print("--------未受講--------")
+		for pending_key in pending.keys():
+			print(pending_key)
+		# pprint.pprint(pending)
+
+		print("--------受講済み--------")
+		for settled_key in settled.keys():
+			print(settled_key)
+		# pprint.pprint(settled)
 		break
+
 
 
 
